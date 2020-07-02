@@ -1,13 +1,19 @@
 <script>
-  import { setContext } from "svelte";
+  import { setContext, onMount } from "svelte";
+  import feather from "feather-icons";
   import { key } from "../context/notes";
   import NoteList from "./NoteList.svelte";
   import Editor from "./Editor.svelte";
+  import ControlBar from "./ControlBar.svelte";
 
   setContext(key, {
     getNotes: () => notes,
     setSelectedNote: (id) =>
       (selectedNote = notes.find((note) => note.id === id)),
+  });
+
+  onMount(() => {
+    feather.replace();
   });
 
   let notes = [
@@ -24,11 +30,18 @@
 <style>
   main {
     height: 100%;
+  }
+
+  .content {
+    height: 100%;
     display: flex;
   }
 </style>
 
 <main>
-  <NoteList {notes} {selectedNote} />
-  <Editor note={selectedNote} />
+  <ControlBar />
+  <section class="content">
+    <NoteList {notes} {selectedNote} />
+    <Editor note={selectedNote} />
+  </section>
 </main>

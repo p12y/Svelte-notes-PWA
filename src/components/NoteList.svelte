@@ -25,6 +25,7 @@
     border-right: 1px solid var(--border-color);
     height: 100%;
     width: 350px;
+    min-width: 350px;
   }
 
   li {
@@ -51,12 +52,20 @@
   a.active {
     color: #606c76;
   }
+
+  .note-link {
+    transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+
+  .note-link.active {
+    background: hsla(277, 54%, 55%, 0.08);
+  }
 </style>
 
 <section class="note-list">
   <ul>
     {#each notes as note}
-      <li class="note-link">
+      <li class="note-link" class:active={note === selectedNote}>
         <a
           href="/"
           class:active={note === selectedNote}
