@@ -1,8 +1,33 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { key } from "../context/notes";
   export let notes;
   export let selectedNote;
+
+  onMount(() => {
+    const keydownListener = document.addEventListener("keydown", (event) => {
+      let nextIndex = 0;
+      const currIndex = notes.findIndex((note) => selectedNote.id === note.id);
+      const setNextActiveNote = () => {
+        if (event.key === "ArrowDown") {
+          nextIndex = currIndex + 1 < notes.length ? currIndex + 1 : 0;
+        } else if (event.key === "ArrowUp") {
+          nextIndex = currIndex - 1 >= 0 ? currIndex - 1 : notes.length - 1;
+        }
+        setSelectedNote(notes[nextIndex].id);
+      };
+
+      if (
+        document.activeElement.classList.contains("link") &&
+        /ArrowUp|ArrowDown/.test(event.key)
+      ) {
+        event.preventDefault();
+        setNextActiveNote();
+      }
+    });
+
+    return () => document.removeEventListener("keydown", keydownListener);
+  });
 
   const { setSelectedNote } = getContext(key);
 
@@ -68,6 +93,7 @@
       <li class="note-link" class:active={note === selectedNote}>
         <a
           href="/"
+          class="link"
           class:active={note === selectedNote}
           on:click={handleLinkClick(note.id)}>
           <h5 class="title truncate">{getTitle(note.text)}</h5>
