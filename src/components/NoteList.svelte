@@ -11,10 +11,11 @@
       const setNextActiveNote = () => {
         if (event.key === "ArrowDown") {
           nextIndex = currIndex + 1 < notes.length ? currIndex + 1 : 0;
+          setSelectedNote(notes[nextIndex].id);
         } else if (event.key === "ArrowUp") {
           nextIndex = currIndex - 1 >= 0 ? currIndex - 1 : notes.length - 1;
+          setSelectedNote(notes[nextIndex].id);
         }
-        setSelectedNote(notes[nextIndex].id);
       };
 
       if (
@@ -49,15 +50,15 @@
   .note-list {
     border-right: 1px solid var(--border-color);
     height: 100%;
-    width: 350px;
     min-width: 350px;
+    width: 350px;
   }
 
   li {
-    list-style-type: none;
     border-bottom: 1px solid var(--border-color);
-    padding: 1rem;
+    list-style-type: none;
     margin: 0;
+    padding: 0;
   }
 
   .title {
@@ -69,9 +70,14 @@
   }
 
   .truncate {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  a.link {
+    display: block;
+    padding: 1rem;
   }
 
   a.active {

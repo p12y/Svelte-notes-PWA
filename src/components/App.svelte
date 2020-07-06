@@ -33,8 +33,8 @@
   }
 
   .content {
-    height: 100%;
     display: flex;
+    height: 100%;
   }
 </style>
 

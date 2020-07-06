@@ -1,26 +1,25 @@
 <style>
   .control-bar {
-    width: 100%;
     border-bottom: 1px solid var(--border-color);
     display: flex;
+    width: 100%;
   }
 
   .searchbar {
-    margin: 0;
-    margin-right: 15px;
+    margin: 0 15px 0 0;
   }
 
   .controls {
-    display: flex;
     align-items: center;
-    padding: 15px;
+    display: flex;
     height: 100%;
+    padding: 15px;
   }
 
   .main-controls {
-    width: 350px;
-    min-width: 350px;
     border-right: 1px solid var(--border-color);
+    min-width: 350px;
+    width: 350px;
   }
 
   .note-controls {
@@ -29,11 +28,11 @@
   }
 
   .btn-new-note {
-    padding: 0;
-    margin: 0;
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
+    margin: 0;
+    padding: 0;
   }
 </style>
 

@@ -4,12 +4,12 @@
 
 <style>
   .editor {
+    border: none;
+    height: 100%;
+    outline: none;
+    padding: 2rem;
     position: relative;
     width: 100%;
-    height: 100%;
-    padding: 2rem;
-    outline: none;
-    border: none;
   }
 
   .editor:focus {
