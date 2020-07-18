@@ -17,4 +17,4 @@
   }
 </style>
 
-<textarea class="editor" contenteditable="true" value={note.text} />
+<textarea class="editor" contenteditable="true" value={note ? note.text : ''} />

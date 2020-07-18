@@ -7,14 +7,16 @@
   onMount(() => {
     const keydownListener = document.addEventListener("keydown", (event) => {
       let nextIndex = 0;
-      const currIndex = notes.findIndex((note) => selectedNote.id === note.id);
+      const currIndex = notes.findIndex(
+        (note) => selectedNote._id === note._id
+      );
       const setNextActiveNote = () => {
         if (event.key === "ArrowDown") {
           nextIndex = currIndex + 1 < notes.length ? currIndex + 1 : 0;
-          setSelectedNote(notes[nextIndex].id);
+          setSelectedNote(notes[nextIndex]._id);
         } else if (event.key === "ArrowUp") {
           nextIndex = currIndex - 1 >= 0 ? currIndex - 1 : notes.length - 1;
-          setSelectedNote(notes[nextIndex].id);
+          setSelectedNote(notes[nextIndex]._id);
         }
       };
 
@@ -101,7 +103,7 @@
           href="/"
           class="link"
           class:active={note === selectedNote}
-          on:click={handleLinkClick(note.id)}>
+          on:click={handleLinkClick(note._id)}>
           <h5 class="title truncate">{getTitle(note.text)}</h5>
           <p class="body truncate">{getBody(note.text)}</p>
         </a>
