@@ -1,5 +1,5 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { createNote, deleteNote } from "../database";
 
   export let note;
@@ -47,7 +47,16 @@
 <section class="control-bar">
   <div class="controls main-controls">
     <input class="searchbar" type="text" placeholder="Search" id="search" />
-    <button class="button button-clear btn-new-note" on:click={createNote}>
+    <button
+      class="button button-clear btn-new-note"
+      on:click={() => {
+        if (!notes.length) {
+          createNote();
+        } else if (notes[0] && notes[0].text) {
+          createNote();
+        }
+      }}
+      disabled={notes[0] && !notes[0].text}>
       <i data-feather="file-plus" />
     </button>
   </div>

@@ -1,8 +1,37 @@
 <script>
   import { getContext, onMount } from "svelte";
   import { key } from "../context/notes";
+  import { deleteNote } from "../database";
   export let notes;
   export let selectedNote;
+
+  function deleteEmptyNewNote() {
+    if (notes[0] && !notes[0].text) {
+      deleteNote(notes[0]._id);
+    }
+  }
+
+  const { setSelectedNote } = getContext(key);
+
+  const handleLinkClick = (id) => (event) => {
+    event.preventDefault();
+
+    if (selectedNote._id === id) {
+      return;
+    }
+
+    deleteEmptyNewNote();
+
+    setSelectedNote(id);
+  };
+
+  const getTitle = (note) => {
+    return note.split(/\n/)[0] || "New note";
+  };
+
+  const getBody = (note) => {
+    return note.split(/\n/).slice(1, 2).join("");
+  };
 
   onMount(() => {
     const keydownListener = document.addEventListener("keydown", (event) => {
@@ -11,12 +40,18 @@
         (note) => selectedNote._id === note._id
       );
       const setNextActiveNote = () => {
+        if (notes.length < 2) {
+          return;
+        }
+
         if (event.key === "ArrowDown") {
           nextIndex = currIndex + 1 < notes.length ? currIndex + 1 : 0;
           setSelectedNote(notes[nextIndex]._id);
+          deleteEmptyNewNote();
         } else if (event.key === "ArrowUp") {
           nextIndex = currIndex - 1 >= 0 ? currIndex - 1 : notes.length - 1;
           setSelectedNote(notes[nextIndex]._id);
+          deleteEmptyNewNote();
         }
       };
 
@@ -31,21 +66,6 @@
 
     return () => document.removeEventListener("keydown", keydownListener);
   });
-
-  const { setSelectedNote } = getContext(key);
-
-  const handleLinkClick = (id) => (event) => {
-    event.preventDefault();
-    setSelectedNote(id);
-  };
-
-  const getTitle = (note) => {
-    return note.split(/\n/)[0] || "New note";
-  };
-
-  const getBody = (note) => {
-    return note.split(/\n/).slice(1).join("");
-  };
 </script>
 
 <style>
