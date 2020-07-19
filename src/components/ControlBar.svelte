@@ -1,9 +1,25 @@
 <script>
   import { getContext, onMount } from "svelte";
-  import { createNote, deleteNote } from "../database";
+  import { createNote, deleteNote, searchNotes, fetchNotes } from "../database";
 
   export let note;
   export let notes;
+  let searchInput;
+
+  function handleSearch(event) {
+    if (notes[0] && !notes[0].text) {
+      deleteNote(notes[0]._id);
+    }
+    searchNotes(event.target.value);
+  }
+
+  function createNewNote() {
+    if (!notes.length || (notes[0] && notes[0].text)) {
+      searchInput.value = "";
+      fetchNotes();
+      createNote();
+    }
+  }
 </script>
 
 <style>
@@ -46,16 +62,16 @@
 
 <section class="control-bar">
   <div class="controls main-controls">
-    <input class="searchbar" type="text" placeholder="Search" id="search" />
+    <input
+      bind:this={searchInput}
+      class="searchbar"
+      type="text"
+      placeholder="Search"
+      id="search"
+      on:input={handleSearch} />
     <button
       class="button button-clear btn-new-note"
-      on:click={() => {
-        if (!notes.length) {
-          createNote();
-        } else if (notes[0] && notes[0].text) {
-          createNote();
-        }
-      }}
+      on:click={createNewNote}
       disabled={notes[0] && !notes[0].text}>
       <i data-feather="file-plus" />
     </button>

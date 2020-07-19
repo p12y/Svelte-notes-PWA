@@ -21,16 +21,17 @@
     }
 
     deleteEmptyNewNote();
-
     setSelectedNote(id);
   };
 
   const getTitle = (note) => {
-    return note.split(/\n/)[0] || "New note";
+    const text = note.highlighting ? note.highlighting.text : note.text;
+    return text.split(/\n/)[0] || "New note";
   };
 
   const getBody = (note) => {
-    return note.split(/\n/).slice(1, 2).join("");
+    const text = note.highlighting ? note.highlighting.text : note.text;
+    return text.split(/\n/).slice(1, 2).join("");
   };
 
   onMount(() => {
@@ -124,8 +125,12 @@
           class="link"
           class:active={note === selectedNote}
           on:click={handleLinkClick(note._id)}>
-          <h5 class="title truncate">{getTitle(note.text)}</h5>
-          <p class="body truncate">{getBody(note.text)}</p>
+          <h5 class="title truncate">
+            {@html getTitle(note)}
+          </h5>
+          <p class="body truncate">
+            {@html getBody(note)}
+          </p>
         </a>
       </li>
     {/each}

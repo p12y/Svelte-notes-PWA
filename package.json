@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "feather-icons": "^4.28.0",
+    "lodash": "^4.17.19",
     "pouchdb": "^7.2.1",
+    "pouchdb-quick-search": "p12y/pouchdb-quick-search",
     "sirv-cli": "^0.4.4"
   }
 }
