@@ -1,5 +1,20 @@
 <script>
+  import App from "./App.svelte";
+
+  import { onMount } from "svelte";
+  import { updateNote } from "../database";
+
   export let note;
+  let field;
+
+  const handleKeyDown = (event) => {
+    if (!note) return;
+    updateNote(note._id, field.value);
+  };
+
+  onMount(() => {
+    field.addEventListener("input", handleKeyDown);
+  });
 </script>
 
 <style>
@@ -17,4 +32,8 @@
   }
 </style>
 
-<textarea class="editor" contenteditable="true" value={note ? note.text : ''} />
+<textarea
+  bind:this={field}
+  class="editor"
+  contenteditable="true"
+  value={note ? note.text : ''} />

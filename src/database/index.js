@@ -7,7 +7,7 @@ const store = writable([]);
 async function createNote() {
   try {
     const _id = String(new Date().getTime());
-    const newNote = { _id, text: _id, updatedAt: new Date() };
+    const newNote = { _id, text: "", updatedAt: new Date() };
     const response = await db.post(newNote);
 
     if (response.ok) {
@@ -16,6 +16,23 @@ async function createNote() {
     }
   } catch (error) {
     throw error;
+  }
+}
+
+async function updateNote(id, text) {
+  try {
+    const doc = await db.get(id);
+    const updatedNote = {
+      text,
+      _id: id,
+      _rev: doc._rev,
+      updatedAt: new Date(),
+    };
+    const response = await db.put(updatedNote);
+    const notes = get(store).filter((note) => note._id !== id);
+    store.set([updatedNote, ...notes]);
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -52,4 +69,4 @@ async function deleteNote(id) {
   }
 }
 
-export { db, createNote, fetchNotes, deleteNote, store };
+export { db, createNote, fetchNotes, deleteNote, store, updateNote };
