@@ -28,6 +28,8 @@
 </script>
 
 <style>
+  @import "https://cdn.quilljs.com/1.3.6/quill.bubble.css";
+
   main {
     height: 100%;
   }

@@ -9,3 +9,20 @@ body {
   height: 100%;
   width: 100%;
 }
+
+button {
+  margin-bottom: 0;
+}
+
+p,
+.ql-editor {
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+.ql-editor {
+  word-break: break-all;
+}

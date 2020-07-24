@@ -24,14 +24,19 @@
     setSelectedNote(id);
   };
 
-  const getTitle = (note) => {
-    const text = note.highlighting ? note.highlighting.text : note.text;
-    return text.split(/\n/)[0] || "New note";
-  };
+  const getText = (note, type) => {
+    if (type === "title" || type === "additionalText") {
+      const defaultText = {
+        title: "New note",
+        additionalText: "No additional text",
+      };
 
-  const getBody = (note) => {
-    const text = note.highlighting ? note.highlighting.text : note.text;
-    return text.split(/\n/).slice(1, 2).join("");
+      return note.highlighting && note.highlighting[type]
+        ? note.highlighting[type]
+        : (note[type] && note[type].trim()) || defaultText[type];
+    }
+
+    throw new Error("Incorrect type");
   };
 
   onMount(() => {
@@ -126,10 +131,10 @@
           class:active={note === selectedNote}
           on:click={handleLinkClick(note._id)}>
           <h5 class="title truncate">
-            {@html getTitle(note)}
+            {@html getText(note, 'title')}
           </h5>
           <p class="body truncate">
-            {@html getBody(note)}
+            {@html getText(note, 'additionalText')}
           </p>
         </a>
       </li>

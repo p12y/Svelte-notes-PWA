@@ -3,15 +3,23 @@ import QuickSearch from "pouchdb-quick-search";
 import { writable, get } from "svelte/store";
 import debounce from "lodash/debounce";
 
-PouchDB.plugin(QuickSearch);
-
+const DEFAULT_TITLE = "New note";
+const DEFAULT_ADDITIONAL_TEXT = "No additional text";
 const db = new PouchDB("notes");
 const store = writable([]);
+
+PouchDB.plugin(QuickSearch);
 
 async function createNote() {
   try {
     const _id = String(new Date().getTime());
-    const newNote = { _id, text: "", updatedAt: new Date() };
+    const newNote = {
+      _id,
+      text: "",
+      updatedAt: new Date(),
+      title: DEFAULT_TITLE,
+      additionalText: DEFAULT_ADDITIONAL_TEXT,
+    };
     const response = await db.post(newNote);
 
     if (response.ok) {
@@ -23,11 +31,19 @@ async function createNote() {
   }
 }
 
-async function updateNote(id, text) {
+async function updateNote(id, delta, text) {
+  const [title, additionalText] = text
+    .split(/\n/)
+    .map((str) => str.trim())
+    .filter((val) => val) || [DEFAULT_TITLE, DEFAULT_ADDITIONAL_TEXT];
+
   try {
     const doc = await db.get(id);
     const updatedNote = {
-      text,
+      title,
+      additionalText,
+      delta,
+      text: text.trim(),
       _id: id,
       _rev: doc._rev,
       updatedAt: new Date(),
@@ -87,7 +103,7 @@ const searchNotes = debounce(async (text) => {
   try {
     const result = await db.search({
       query: text,
-      fields: ["text"],
+      fields: ["title", "additionalText"],
       include_docs: true,
       highlighting: true,
     });

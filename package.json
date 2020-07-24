@@ -21,6 +21,7 @@
     "lodash": "^4.17.19",
     "pouchdb": "^7.2.1",
     "pouchdb-quick-search": "p12y/pouchdb-quick-search",
+    "quill": "1.3.6",
     "sirv-cli": "^0.4.4"
   }
 }
