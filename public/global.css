@@ -26,3 +26,7 @@ p,
 .ql-editor {
   word-break: break-all;
 }
+
+.highlight {
+  color: #9b4dca !important;
+}

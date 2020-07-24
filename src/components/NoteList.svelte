@@ -106,9 +106,6 @@
   a.link {
     display: block;
     padding: 1rem;
-  }
-
-  a.active {
     color: #606c76;
   }
 

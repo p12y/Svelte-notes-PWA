@@ -106,6 +106,8 @@ const searchNotes = debounce(async (text) => {
       fields: ["title", "additionalText"],
       include_docs: true,
       highlighting: true,
+      highlighting_pre: '<span class="highlight">',
+      highlighting_post: "</span>",
     });
 
     setNotes(result);
