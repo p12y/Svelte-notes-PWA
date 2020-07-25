@@ -1,7 +1,5 @@
 <script>
   import { getContext, onMount } from "svelte";
-  import { fade } from "svelte/transition";
-  import { flip } from "svelte/animate";
   import { key } from "../context/notes";
   import {
     deleteNote,
@@ -135,12 +133,7 @@
 <section class="note-list">
   <ul>
     {#each notes as note (note._id)}
-      <li
-        class="note-link"
-        class:active={note === selectedNote}
-        in:fade={{ duration: 200 }}
-        out:fade={{ duration: 0 }}
-        animate:flip={{ duration: 200 }}>
+      <li class="note-link" class:active={note === selectedNote}>
         <a
           href="/"
           class="link"
