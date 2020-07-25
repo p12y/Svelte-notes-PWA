@@ -1,6 +1,5 @@
 <script>
   import Quill from "quill";
-  import App from "./App.svelte";
   import debounce from "lodash/debounce";
   import { onMount, afterUpdate } from "svelte";
   import { updateNote } from "../database";
