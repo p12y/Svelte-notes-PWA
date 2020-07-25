@@ -16,6 +16,7 @@
     feather.replace();
 
     store.subscribe((allNotes) => {
+      console.log("upodate");
       notes = allNotes;
       selectedNote = notes[0];
     });
