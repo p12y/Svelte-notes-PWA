@@ -1,7 +1,11 @@
 <script>
   import { getContext, onMount } from "svelte";
   import { key } from "../context/notes";
-  import { deleteNote } from "../database";
+  import {
+    deleteNote,
+    DEFAULT_TITLE,
+    DEFAULT_ADDITIONAL_TEXT,
+  } from "../database";
   export let notes;
   export let selectedNote;
 
@@ -27,8 +31,8 @@
   const getText = (note, type) => {
     if (type === "title" || type === "additionalText") {
       const defaultText = {
-        title: "New note",
-        additionalText: "No additional text",
+        title: DEFAULT_TITLE,
+        additionalText: DEFAULT_ADDITIONAL_TEXT,
       };
 
       return note.highlighting && note.highlighting[type]

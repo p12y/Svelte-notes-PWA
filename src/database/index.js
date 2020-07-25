@@ -3,8 +3,8 @@ import QuickSearch from "pouchdb-quick-search";
 import { writable, get } from "svelte/store";
 import debounce from "lodash/debounce";
 
-const DEFAULT_TITLE = "New note";
-const DEFAULT_ADDITIONAL_TEXT = "No additional text";
+export const DEFAULT_TITLE = "New note";
+export const DEFAULT_ADDITIONAL_TEXT = "No additional text";
 const db = new PouchDB("notes");
 const store = writable([]);
 
