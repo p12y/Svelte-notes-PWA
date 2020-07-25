@@ -36,7 +36,8 @@
 
   .content {
     display: flex;
-    height: 100%;
+    height: calc(100vh - 60px);
+    overflow: hidden;
   }
 </style>
 

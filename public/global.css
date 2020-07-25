@@ -24,7 +24,7 @@ p,
 }
 
 .ql-editor {
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .highlight {

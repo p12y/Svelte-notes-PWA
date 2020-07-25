@@ -56,7 +56,6 @@
     border: none;
     height: 100%;
     outline: none;
-    padding: 2rem;
     position: relative;
     width: 100%;
   }

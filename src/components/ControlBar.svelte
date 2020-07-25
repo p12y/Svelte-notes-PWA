@@ -30,14 +30,14 @@
   }
 
   .searchbar {
-    margin: 0 15px 0 0;
+    margin: 0 10px 0 0;
   }
 
   .controls {
     align-items: center;
     display: flex;
-    height: 100%;
-    padding: 15px;
+    height: 60px;
+    padding: 10px;
   }
 
   .main-controls {
@@ -57,6 +57,13 @@
     justify-content: center;
     margin: 0;
     padding: 0;
+  }
+
+  @media only screen and (max-width: 650px) {
+    .main-controls {
+      min-width: 150px;
+      width: 150px;
+    }
   }
 </style>
 

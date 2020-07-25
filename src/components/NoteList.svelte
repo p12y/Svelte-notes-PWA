@@ -83,6 +83,7 @@
     border-right: 1px solid var(--border-color);
     height: 100%;
     min-width: 350px;
+    overflow: auto;
     width: 350px;
   }
 
@@ -119,6 +120,13 @@
 
   .note-link.active {
     background: hsla(277, 54%, 55%, 0.08);
+  }
+
+  @media only screen and (max-width: 650px) {
+    .note-list {
+      min-width: 150px;
+      width: 150px;
+    }
   }
 </style>
 
