@@ -1,25 +1,57 @@
 <script>
   import { getContext, onMount } from "svelte";
+  import debounce from "lodash/debounce";
   import { createNote, deleteNote, searchNotes, fetchNotes } from "../database";
+  import { key } from "../context/notes";
 
   export let note;
   export let notes;
   let searchInput;
+  const { setSelectedNote, getQuill } = getContext(key);
+
+  const search = debounce(async (text) => {
+    await searchNotes(text);
+
+    if (notes.length) {
+      setSelectedNote(notes[0]._id);
+    } else {
+      setSelectedNote(null);
+    }
+  }, 300);
 
   function handleSearch(event) {
     if (notes[0] && !notes[0].text) {
       deleteNote(notes[0]._id);
     }
-    searchNotes(event.target.value);
+
+    search(event.target.value);
   }
 
-  function createNewNote() {
+  async function createNewNote() {
     if (!notes.length || (notes[0] && notes[0].text)) {
       searchInput.value = "";
-      fetchNotes();
-      createNote();
+      try {
+        await fetchNotes();
+        const id = await createNote();
+        setSelectedNote(id);
+        getQuill().focus();
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
+
+  const deleteCurrentNote = async () => {
+    if (note) {
+      await deleteNote(note._id);
+
+      if (notes[0]) {
+        setSelectedNote(notes[0]._id);
+      } else {
+        setSelectedNote(null);
+      }
+    }
+  };
 </script>
 
 <style>
@@ -87,7 +119,7 @@
     <button
       class="button button-clear btn-new-note"
       disabled={Boolean(!notes.length)}
-      on:click={() => note && deleteNote(note._id)}>
+      on:click={deleteCurrentNote}>
       <i data-feather="trash-2" />
     </button>
   </div>

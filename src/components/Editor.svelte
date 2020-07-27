@@ -1,23 +1,25 @@
 <script>
   import Quill from "quill";
   import debounce from "lodash/debounce";
-  import { onMount, afterUpdate } from "svelte";
+  import { onMount, afterUpdate, getContext } from "svelte";
   import { updateNote } from "../database";
+  import { key } from "../context/notes";
 
   export let note;
+  export let notes;
   let editor;
   let quill;
-  let prevNote = {
-    _id: null,
-  };
+  let prevId;
+
+  const { setSelectedNote, setQuill } = getContext(key);
+
+  const toolbarOptions = [
+    ["bold", "italic", "underline"],
+    [{ list: "bullet" }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  ];
 
   onMount(() => {
-    const toolbarOptions = [
-      ["bold", "italic", "underline"],
-      [{ list: "bullet" }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    ];
-
     quill = new Quill(editor, {
       theme: "bubble",
       bounds: document.body,
@@ -26,11 +28,16 @@
       },
     });
 
-    const handleTextChange = debounce((delta, oldDelta, source) => {
+    setQuill(quill);
+
+    const handleTextChange = debounce(async (delta, oldDelta, source) => {
+      if (!note) return;
+
       if (source === "user") {
         const contents = quill.getContents();
         const text = quill.getText();
-        updateNote(note._id, contents, text);
+        await updateNote(note._id, contents, text);
+        setSelectedNote(notes[0]._id);
       }
     }, 20);
 
@@ -40,12 +47,13 @@
   afterUpdate(() => {
     if (!note) {
       quill.setContents("");
+      prevId = null;
       return;
     }
 
-    if (note && note._id !== prevNote._id) {
+    if (note._id !== prevId) {
       quill.setContents(note.delta);
-      prevNote = note;
+      prevId = note._id;
     }
   });
 </script>

@@ -7,9 +7,27 @@
   import Editor from "./Editor.svelte";
   import ControlBar from "./ControlBar.svelte";
 
+  let notes = [];
+  let isNavigating = false;
+  let selectedNote;
+  let quill;
+
+  const handleWindowClick = () => {
+    isNavigating = false;
+  };
+
   setContext(key, {
-    setSelectedNote: (id) =>
-      (selectedNote = notes.find((note) => note._id === id)),
+    setQuill: (instance) => {
+      quill = instance;
+    },
+    getQuill: () => quill,
+    getIsNavigating: () => isNavigating,
+    setSelectedNote: (id) => {
+      selectedNote = notes.find((note) => note._id === id);
+    },
+    setIsNavigating: (value) => {
+      isNavigating = value;
+    },
   });
 
   onMount(() => {
@@ -17,14 +35,14 @@
 
     store.subscribe((allNotes) => {
       notes = allNotes;
-      selectedNote = notes[0];
+
+      if (!selectedNote) {
+        selectedNote = notes[0];
+      }
     });
 
     fetchNotes();
   });
-
-  let notes = [];
-  let selectedNote;
 </script>
 
 <style>
@@ -41,10 +59,12 @@
   }
 </style>
 
+<svelte:window on:click={handleWindowClick} />
+
 <main>
-  <ControlBar note={selectedNote} {notes} />
+  <ControlBar note={selectedNote} {notes} {quill} />
   <section class="content">
-    <NoteList {notes} {selectedNote} />
-    <Editor note={selectedNote} />
+    <NoteList {notes} {selectedNote} {isNavigating} />
+    <Editor note={selectedNote} {notes} {quill} />
   </section>
 </main>

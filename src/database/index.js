@@ -1,7 +1,6 @@
 import PouchDB from "pouchdb";
 import QuickSearch from "pouchdb-quick-search";
 import { writable, get } from "svelte/store";
-import debounce from "lodash/debounce";
 
 export const DEFAULT_TITLE = "New note";
 export const DEFAULT_ADDITIONAL_TEXT = "No additional text";
@@ -25,6 +24,7 @@ async function createNote() {
     if (response.ok) {
       const notes = get(store);
       store.set([newNote, ...notes]);
+      return _id;
     }
   } catch (error) {
     throw error;
@@ -93,7 +93,7 @@ async function deleteNote(id) {
   }
 }
 
-const searchNotes = debounce(async (text) => {
+const searchNotes = async (text) => {
   const query = text.trim();
 
   if (!query) {
@@ -114,7 +114,7 @@ const searchNotes = debounce(async (text) => {
   } catch (error) {
     console.error(error);
   }
-}, 300);
+};
 
 export {
   db,

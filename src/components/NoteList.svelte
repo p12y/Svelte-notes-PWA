@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onMount } from "svelte";
+  import { getContext, onMount, afterUpdate } from "svelte";
   import { key } from "../context/notes";
   import {
     deleteNote,
@@ -8,6 +8,7 @@
   } from "../database";
   export let notes;
   export let selectedNote;
+  export let isNavigating;
 
   function deleteEmptyNewNote() {
     if (notes[0] && !notes[0].text) {
@@ -15,10 +16,13 @@
     }
   }
 
-  const { setSelectedNote } = getContext(key);
+  const { setSelectedNote, setIsNavigating } = getContext(key);
 
   const handleLinkClick = (id) => (event) => {
     event.preventDefault();
+    event.stopPropagation();
+
+    setIsNavigating(true);
 
     if (selectedNote._id === id) {
       return;
@@ -54,21 +58,22 @@
           return;
         }
 
-        if (event.key === "ArrowDown") {
-          nextIndex = currIndex + 1 < notes.length ? currIndex + 1 : 0;
-          setSelectedNote(notes[nextIndex]._id);
-          deleteEmptyNewNote();
-        } else if (event.key === "ArrowUp") {
-          nextIndex = currIndex - 1 >= 0 ? currIndex - 1 : notes.length - 1;
-          setSelectedNote(notes[nextIndex]._id);
-          deleteEmptyNewNote();
+        switch (event.key) {
+          case "ArrowDown":
+            nextIndex = currIndex + 1 < notes.length ? currIndex + 1 : 0;
+            break;
+          case "ArrowUp":
+            nextIndex = currIndex - 1 >= 0 ? currIndex - 1 : notes.length - 1;
+            break;
+          default:
+            break;
         }
+
+        setSelectedNote(notes[nextIndex]._id);
+        deleteEmptyNewNote();
       };
 
-      if (
-        document.activeElement.classList.contains("link") &&
-        /ArrowUp|ArrowDown/.test(event.key)
-      ) {
+      if (isNavigating && /ArrowUp|ArrowDown/.test(event.key)) {
         event.preventDefault();
         setNextActiveNote();
       }
@@ -122,6 +127,10 @@
     background: hsla(277, 54%, 55%, 0.08);
   }
 
+  .note-link.active.navigating {
+    background: hsla(277, 54%, 55%, 0.2);
+  }
+
   @media only screen and (max-width: 650px) {
     .note-list {
       min-width: 150px;
@@ -133,7 +142,10 @@
 <section class="note-list">
   <ul>
     {#each notes as note (note._id)}
-      <li class="note-link" class:active={note === selectedNote}>
+      <li
+        class="note-link"
+        class:active={note === selectedNote}
+        class:navigating={Boolean(isNavigating)}>
         <a
           href="/"
           class="link"
